@@ -35,9 +35,14 @@ class JobController extends Controller
 
     public function update(Request $request, Jobs $job)
     {
+        $attribute = $request->validate([
+            'job_name' => ['required'],
+            'company' => ['required'],
+            'rate' => ['required'],
+            'sallary' => ['required'],
+        ]);
 
-
-        $job->update();
+        $job->update($attribute);
 
         return response()->json(['data' => $job]);
     }
