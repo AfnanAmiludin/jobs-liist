@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Categori;
+use App\Models\Categories;
 use App\Models\Jobs;
 use Illuminate\Http\Request;
 
@@ -21,9 +23,24 @@ class JobController extends Controller
             'company' => ['required'],
             'rate' => ['required'],
             'sallary' => ['required'],
+            'categori.*' => ['required']
         ]);
 
-        $job = Jobs::create($attribute);
+        $job = new Jobs();
+        $job->job_name = $attribute['job_name'];
+        $job->company = $attribute['company'];
+        $job->rate = $attribute['rate'];
+        $job->sallary = $attribute['sallary'];
+        $job->save();
+
+        for ($i = 0; $i < count($attribute['categori']); $i++) {
+            $categori = new Categori();
+            $categori->jobes_id = $job->id;
+            $categori->name_categori = $attribute['categori'][$i];
+            $categori->save();
+        }
+
+        $job = Jobs::where('id', $job->id)->with('categories')->first();
 
         return response()->json(['data' => $job]);
     }
