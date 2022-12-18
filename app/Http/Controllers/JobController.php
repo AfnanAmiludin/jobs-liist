@@ -45,12 +45,13 @@ class JobController extends Controller
         return response()->json(['data' => $job]);
     }
 
-    public function show(Jobs $job)
+    public function show($id)
     {
+        $job = Jobs::find($id);
         return response()->json(['data' => $job]);
     }
 
-    public function update(Request $request, Jobs $job)
+    public function update(Request $request, $id)
     {
         $attribute = $request->validate([
             'job_name' => ['required'],
@@ -58,6 +59,8 @@ class JobController extends Controller
             'rate' => ['required'],
             'sallary' => ['required'],
         ]);
+
+        $job = Jobs::find($id);
 
         $job->update($attribute);
 

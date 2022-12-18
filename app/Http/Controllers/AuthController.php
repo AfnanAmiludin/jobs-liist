@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jobs;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,13 +35,15 @@ class AuthController extends Controller
         return response()->json(['data' => $user]);
     }
 
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
         $attribute = $request->validate([
             'username' => ['required'],
             'email' => ['required'],
             'password' => ['required'],
         ]);
+
+        $user = User::find($id);
 
         $user->update($attribute);
 
